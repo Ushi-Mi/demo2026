@@ -38,7 +38,8 @@ no security default
 exit
 wr
 ```
-BR-RTR
+**BR-RTR**
+```
 en
 conf t
 interface int0
@@ -57,7 +58,8 @@ ip route 0.0.0.0 0.0.0.0 172.16.2.1
 no security default
 exit
 wr
-HQ-SRV | HQ-CLI | BR-SRV
+```
+**HQ-SRV | HQ-CLI | BR-SRV**
 Базовая коммутация до роутеров.
 Название пользователя: root|user, Пароль: toor|resu (На HQ-SRV|BR-SRV root, на HQ-CLI user)
 
