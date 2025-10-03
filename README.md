@@ -2,6 +2,7 @@
 
 Зайти по айпи адресу, выдаваемый машиной, затем зайти в его хранилище > ISO Образы
 <img width="841" height="335" alt="image" src="https://github.com/user-attachments/assets/57254d6d-2fa6-42fa-91bb-87079de325ea" />
+
 Затем нужно загрузить образ, который требуется (В данном случае Additional.iso)
 <img width="421" height="309" alt="image" src="https://github.com/user-attachments/assets/070394ec-5e25-46ff-8bc4-46b4326714ce" />
 Затем нужно вмонтировать этот образ в HQ-SRV и BR-SRV: Нужно нажать по конкретной машине -> Hardware, Add > CD|DVD drive -> Дальше всё как на скрине и нажать "ОК"
