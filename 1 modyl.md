@@ -224,6 +224,8 @@ timedatectl set-timezone Asia/Yekaterinburg
 systemctl restart network
 apt-get update && apt-get install dnsmasq
 systemctl enable --now dnsmasq
+
+
 echo "no-resolv" >> /etc/dnsmasq.conf
 echo "domain=au-team.irpo" >> /etc/dnsmasq.conf
 echo "server=8.8.8.8" >> /etc/dnsmasq.conf
