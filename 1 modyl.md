@@ -233,14 +233,16 @@ echo "server=8.8.8.8" >> /etc/dnsmasq.conf
 echo "interface=*" >> /etc/dnsmasq.conf
 echo "address=/docker.au-team.irpo/172.16.1.1" >> /etc/dnsmasq.conf
 echo "address=/web.au-team.irpo/172.16.2.1" >> /etc/dnsmasq.conf
-echo "address=/address=/hq-rtr.au-team.irpo/192.168.1.1" >> /etc/dnsmasq.conf
-echo "address=/ptr-record=1.1.168.192.in-addr.arpa,hq-rtr.au-team.irpo" >> /etc/dnsmasq.conf
+echo "address=/hq-rtr.au-team.irpo/192.168.1.1" >> /etc/dnsmasq.conf
+echo "ptr-record=1.1.168.192.in-addr.arpa,hq-rtr.au-team.irpo" >> /etc/dnsmasq.conf
 echo "address=/hq-srv.au-team.irpo/192.168.1.10" >> /etc/dnsmasq.conf
 echo "ptr-record=10.1.168.192.in-addr.arpa,hq-srv.au-team.irpo" >> /etc/dnsmasq.conf
 echo "address=/hq-cli.au-team.irpo/192.168.2.10" >> /etc/dnsmasq.conf
 echo "ptr-record=10.2.168.192.in-addr.arpa,hq-cli.au-team.irpo" >> /etc/dnsmasq.conf
 echo "address=/br-rtr.au-team.irpo/192.168.3.1" >> /etc/dnsmasq.conf
 echo "address=/br-srv.au-team.irpo/192.168.3.10" >> /etc/dnsmasq.conf
+
+
 echo "192.168.1.1   hq-rtr.au-team.irpo" >> /etc/hosts
 systemctl restart dnsmasq
 exec bash
