@@ -17,7 +17,6 @@ timedatectl set-timezone Asia/Yekaterinburg
 iptables -t nat -A POSTROUTING -o ens20 -s 0/0 -j MASQUERADE
 iptables-save > /etc/sysconfig/iptables
 systemctl enable --now iptables
-exec bash 
 ```
 **HQ-RTR**
 ```
