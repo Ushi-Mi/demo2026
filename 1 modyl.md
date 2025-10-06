@@ -170,20 +170,28 @@ en
 **BR-SRV**
 
 ```
-hostnamectl set-hostname br-srv.au-team.irpo; exec bash
+hostnamectl set-hostname br-srv.au-team.irpo;
 mkdir -p /etc/net/ifaces/ens20
 echo -e "DISABLED=no\nTYPE=eth\nBOOTPROTO=static\nCONFIG_IPv4=yes" > /etc/net/ifaces/ens20/options
 echo 192.168.3.10/28 > /etc/net/ifaces/ens20/ipv4address
 echo default via 192.168.3.1 > /etc/net/ifaces/ens20/ipv4route
 echo nameserver 8.8.8.8 > /etc/resolv.conf 
 systemctl restart network
-useradd sshuser –u 2026 
-passwd sshuser
-gpasswd –a “sshuser” wheel 
-echo "User_Alias	WHEEL_USERS = %wheel\nUser_Alias	XGRP_USERS = %xgrp\nDefaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY"\nWHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
-User_Alias	WHEEL_USERS = %wheel
-User_Alias	XGRP_USERS = %xgrp
-Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY"
-WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL
-
+useradd sshuser -u 2026
+useradd -p P@ssw0rd sshuser
+gpasswd -a "sshuser" wheel
+echo "User_Alias	WHEEL_USERS = %wheel" >> /etc/sudoers
+echo "User_Alias	XGRP_USERS = %xgrp" >> /etc/sudoers
+echo "Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY" " >> /etc/sudoers
+echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+vim /etc/openssh/sshd_config
+echo "Port 2026" >> vim /etc/openssh/sshd_config
+echo "MaxAuthTries 2 " >> vim /etc/openssh/sshd_config
+echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
+echo "Banner /etc/openssh/banner" >> /etc/openssh/sshd_config
+echo "Authorized access only" >> /etc/openssh/banner
+systemctl restart sshd
+timedatectl set-timezone Asia/Yekaterinburg
+exec bash
+```
 
