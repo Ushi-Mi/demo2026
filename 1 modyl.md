@@ -241,7 +241,6 @@ echo "ptr-record=10.2.168.192.in-addr.arpa,hq-cli.au-team.irpo" >> /etc/dnsmasq.
 echo "address=/br-rtr.au-team.irpo/192.168.3.1" >> /etc/dnsmasq.conf
 echo "address=/br-srv.au-team.irpo/192.168.3.10" >> /etc/dnsmasq.conf
 echo "192.168.1.1   hq-rtr.au-team.irpo" >> /etc/hosts
-systemctl enable --now dnsmasq
 systemctl restart dnsmasq
 exec bash
 ```
