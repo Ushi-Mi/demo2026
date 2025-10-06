@@ -180,7 +180,7 @@ systemctl restart network
 useradd sshuser –u 2026 
 passwd sshuser
 gpasswd –a “sshuser” wheel 
-echo -e "User_Alias	WHEEL_USERS = %wheel\nUser_Alias	XGRP_USERS = %xgrp\nDefaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY"\nWHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers
+echo "User_Alias	WHEEL_USERS = %wheel\nUser_Alias	XGRP_USERS = %xgrp\nDefaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY"\nWHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 User_Alias	WHEEL_USERS = %wheel
 User_Alias	XGRP_USERS = %xgrp
 Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY"
