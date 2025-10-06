@@ -167,11 +167,11 @@ en
 ᅠ ᅠᅠ ᅠᅠ ᅠend
 ᅠ ᅠwrite memory
 ```
-**HQ-SRV**
+**BR-SRV**
 
 ```
 hostnamectl set-hostname br-srv.au-team.irpo; exec bash
-mkdir /etc/net/ifaces/ens20
+mkdir -p /etc/net/ifaces/ens20
 echo -e "DISABLED=no\nTYPE=eth\nBOOTPROTO=static\nCONFIG_IPv4=yes" > /etc/net/ifaces/ens20/options
 echo 192.168.3.10/28 > /etc/net/ifaces/ens20/ipv4address
 echo default via 192.168.3.1 > /etc/net/ifaces/ens20/ipv4route
@@ -180,8 +180,10 @@ systemctl restart network
 useradd sshuser –u 2026 
 passwd sshuser
 gpasswd –a “sshuser” wheel 
-
-
-
+echo -e "User_Alias	WHEEL_USERS = %wheel\nUser_Alias	XGRP_USERS = %xgrp\nDefaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY"\nWHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers
+User_Alias	WHEEL_USERS = %wheel
+User_Alias	XGRP_USERS = %xgrp
+Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY"
+WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL
 
 
