@@ -17,8 +17,9 @@ timedatectl set-timezone Asia/Yekaterinburg
 iptables -t nat -A POSTROUTING -o ens20 -s 0/0 -j MASQUERADE
 iptables-save > /etc/sysconfig/iptables
 systemctl enable --now iptables
-```
 exec bash
+```
+
 
 **HQ-RTR**
 ```
@@ -179,10 +180,7 @@ systemctl restart network
 useradd sshuser -u 2026
 useradd -p P@ssw0rd sshuser
 gpasswd -a "sshuser" wheel
-echo "User_Alias	WHEEL_USERS = %wheel" >> /etc/sudoers
-echo "User_Alias	XGRP_USERS = %xgrp" >> /etc/sudoers
-echo "Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY" " >> /etc/sudoers
-echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+echo -e "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers
 echo "Port 2026" >> /etc/openssh/sshd_config
 echo "MaxAuthTries 2" >> /etc/openssh/sshd_config
 echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
@@ -215,10 +213,7 @@ systemctl restart network
 useradd sshuser -u 2026
 useradd -p P@ssw0rd sshuser
 gpasswd -a "sshuser" wheel
-echo "User_Alias	WHEEL_USERS = %wheel" >> /etc/sudoers
-echo "User_Alias	XGRP_USERS = %xgrp" >> /etc/sudoers
-echo "Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY" " >> /etc/sudoers
-echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+echo -e "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers
 echo "Port 2026" >> /etc/openssh/sshd_config
 echo "MaxAuthTries 2" >> /etc/openssh/sshd_config
 echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
@@ -227,7 +222,7 @@ echo "Authorized access only" >> /etc/openssh/banner
 systemctl restart sshd
 timedatectl set-timezone Asia/Yekaterinburg
 systemctl restart network
-apt-get update && apt-get install dnsmasq –y
+apt-get update && apt-get install dnsmasq
 systemctl enable --now dnsmasq
 echo "no-resolv" >> /etc/dnsmasq.conf
 echo "domain=au-team.irpo" >> /etc/dnsmasq.conf
@@ -243,8 +238,23 @@ echo "address=/hq-cli.au-team.irpo/192.168.2.10" >> /etc/dnsmasq.conf
 echo "ptr-record=10.2.168.192.in-addr.arpa,hq-cli.au-team.irpo" >> /etc/dnsmasq.conf
 echo "address=/br-rtr.au-team.irpo/192.168.3.1" >> /etc/dnsmasq.conf
 echo "address=/br-srv.au-team.irpo/192.168.3.10" >> /etc/dnsmasq.conf
-echo -e "192.168.1.1  hq-rtr.au-team.irpo" > vim /etc/hosts
+echo "192.168.1.1   hq-rtr.au-team.irpo" >> /etc/hosts
 systemctl enable --now dnsmasq
 systemctl restart dnsmasq
 exec bash
 ```
+
+
+
+
+
+
+
+
+
+
+
+echo "User_Alias	WHEEL_USERS = %wheel" >> /etc/sudoers
+echo "User_Alias	XGRP_USERS = %xgrp" >> /etc/sudoers
+echo "Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY" " >> /etc/sudoers
+echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
