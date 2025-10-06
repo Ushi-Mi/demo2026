@@ -185,8 +185,8 @@ echo "User_Alias	XGRP_USERS = %xgrp" >> /etc/sudoers
 echo "Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY" " >> /etc/sudoers
 echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 vim /etc/openssh/sshd_config
-echo "Port 2026" >> vim /etc/openssh/sshd_config
-echo "MaxAuthTries 2 " >> vim /etc/openssh/sshd_config
+echo "Port 2026" >> /etc/openssh/sshd_config
+echo "MaxAuthTries 2" >> /etc/openssh/sshd_config
 echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
 echo "Banner /etc/openssh/banner" >> /etc/openssh/sshd_config
 echo "Authorized access only" >> /etc/openssh/banner
