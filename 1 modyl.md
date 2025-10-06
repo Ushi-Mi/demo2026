@@ -180,7 +180,7 @@ systemctl restart network
 useradd sshuser -u 2026
 useradd -p P@ssw0rd sshuser
 gpasswd -a "sshuser" wheel
-echo -e "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers
+echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "Port 2026" >> /etc/openssh/sshd_config
 echo "MaxAuthTries 2" >> /etc/openssh/sshd_config
 echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
@@ -213,7 +213,7 @@ systemctl restart network
 useradd sshuser -u 2026
 useradd -p P@ssw0rd sshuser
 gpasswd -a "sshuser" wheel
-echo -e "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers
+echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "Port 2026" >> /etc/openssh/sshd_config
 echo "MaxAuthTries 2" >> /etc/openssh/sshd_config
 echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
