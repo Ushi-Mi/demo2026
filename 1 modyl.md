@@ -22,7 +22,6 @@ exec bash
 
 **HQ-RTR**
 ```
-##### **HQ-RTR**
 en
 conf t
 hostname hq-rtr
@@ -227,6 +226,7 @@ echo "Banner /etc/openssh/banner" >> /etc/openssh/sshd_config
 echo "Authorized access only" >> /etc/openssh/banner
 systemctl restart sshd
 timedatectl set-timezone Asia/Yekaterinburg
+systemctl restart network
 apt-get update && apt-get install dnsmasq –y
 systemctl enable --now dnsmasq
 echo "no-resolv" >> /etc/dnsmasq.conf
