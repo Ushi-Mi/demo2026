@@ -106,4 +106,67 @@ interface int1
 ᅠ ᅠᅠ ᅠᅠ ᅠex
 ᅠ ᅠᅠ ᅠend
 ᅠ ᅠwrite memory
-``
+```
+
+**BR-RTR**
+```
+en
+ᅠ ᅠconf t
+ᅠ ᅠᅠ ᅠhostname br-rtr 
+ᅠ ᅠᅠ ᅠip domain-name au-team.irpo
+ᅠ ᅠᅠ ᅠinterface int0
+ᅠ ᅠᅠ ᅠᅠ ᅠip nat outside
+ᅠ ᅠᅠ ᅠᅠ ᅠip address 172.16.2.5/28
+ᅠ ᅠᅠ ᅠᅠ ᅠexit
+ᅠ ᅠᅠ ᅠport te0
+ᅠ ᅠᅠ ᅠᅠ ᅠservice-instance te0/int0
+ᅠ ᅠᅠ ᅠᅠ ᅠᅠ ᅠencapsulation untagged
+ᅠ ᅠᅠ ᅠᅠ ᅠᅠ ᅠexit
+ᅠ ᅠᅠ ᅠᅠ ᅠexit
+ᅠ ᅠᅠ ᅠinterface int0
+ᅠ ᅠᅠ ᅠᅠ ᅠconnect port te0 service-instance te0/int0
+ᅠ ᅠᅠ ᅠᅠ ᅠexit
+ᅠᅠ ᅠ ᅠinterface int1
+ᅠ ᅠᅠ ᅠᅠ ᅠip nat inside
+ᅠ ᅠᅠᅠ ᅠ ᅠip address 192.168.3.1/28
+ᅠ ᅠᅠᅠ ᅠ ᅠexit
+ᅠᅠ ᅠ ᅠport te1
+ᅠ ᅠᅠ ᅠ ᅠ ᅠservice-instance te1/int1
+ᅠ ᅠᅠ ᅠ ᅠᅠᅠ ᅠencapsulation untagged
+ᅠ ᅠᅠ ᅠᅠ ᅠᅠ ᅠexit
+ᅠ ᅠᅠᅠ ᅠ ᅠ  exit
+ᅠᅠ ᅠ ᅠinterface int1
+ᅠ ᅠᅠ ᅠᅠ ᅠ  connect port te1 service-instance te1/int1
+ᅠ ᅠᅠᅠ ᅠ ᅠ  exit
+ᅠ ᅠᅠ ᅠip route 0.0.0.0 0.0.0.0 172.16.2.1
+		ip name-server 8.8.8.8
+ᅠ ᅠᅠ ᅠip nat pool NAT_POOL 192.168.3.1-192.168.3.254
+ᅠ ᅠᅠ ᅠip nat source dynamic inside-to-outside pool NAT_POOL overload interface int0
+ᅠ ᅠᅠ ᅠint tunnel.0 
+ᅠ ᅠᅠ ᅠᅠ ᅠip address 172.16.0.2/30
+ᅠ ᅠᅠ ᅠᅠ ᅠip mtu 1400 
+ᅠ ᅠᅠ ᅠᅠ ᅠip tunnel 172.16.2.5 172.16.1.4 mode gre
+ᅠ ᅠᅠ ᅠᅠ ᅠip ospf authentication-key ecorouter 
+ᅠ ᅠᅠ ᅠᅠ ᅠex
+ᅠ ᅠᅠ ᅠ  router ospf 1 
+ᅠ ᅠᅠ ᅠᅠ ᅠ  network 172.16.0.0/30 area 0 
+  ᅠ ᅠᅠ ᅠᅠ ᅠnetwork 192.168.3.0/28 area 0
+  ᅠ ᅠᅠ ᅠᅠ ᅠpassive-interface default 
+  ᅠ ᅠᅠ ᅠᅠ ᅠno passive-interface tunnel.0 
+ ᅠ ᅠᅠ ᅠᅠ ᅠ area 0 authentication 
+ ᅠ ᅠᅠ ᅠᅠ ᅠex
+ᅠ ᅠᅠ ᅠ
+ᅠ ᅠᅠ ᅠntp timezone utc+5
+ᅠ ᅠᅠ ᅠusername net_admin 
+ᅠ ᅠᅠ ᅠᅠ ᅠpassword P@ssw0rd 
+ᅠ ᅠᅠ ᅠᅠ ᅠrole admin
+ᅠ ᅠᅠ ᅠᅠ ᅠend
+ᅠ ᅠwrite memory
+```
+
+
+
+
+
+
+
