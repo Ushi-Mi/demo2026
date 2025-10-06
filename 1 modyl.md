@@ -3,7 +3,7 @@
 hostnamectl set-hostname isp; exec bash 
 mkdir /etc/net/ifaces/ens{20,21,22}
 echo -e "TYPE=eth\nBOOTPROTO=dhcp" > /etc/net/ifaces/ens20/options
-echo -e "DISABLED=no\nTYPE=eth\nBOOTPROTO=static\nCONFIG_IPv4=yes" > /etc/net/ifaces/ens20/options
+echo -e "DISABLED=no\nTYPE=eth\nBOOTPROTO=static\nCONFIG_IPv4=yes" > /etc/net/ifaces/ens21/options
 cp /etc/net/ifaces/ens21/options /etc/net/ifaces/ens22
 echo "172.16.1.1/28" > /etc/net/ifaces/ens21/ipv4address
 echo "172.16.2.1/28" > /etc/net/ifaces/ens22/ipv4address
