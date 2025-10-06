@@ -64,6 +64,7 @@ wr
 Название пользователя: root|user, Пароль: toor|resu (На HQ-SRV|BR-SRV root, на HQ-CLI user)
 
 HQ-SRV
+```
 mkdir -p /etc/net/ifaces/ens20
 echo -e "DISABLED=no\nTYPE=eth\nBOOTPROTO=static\nCONFIG_IPv4=yes" > /etc/net/ifaces/ens20/options
 echo "192.168.1.10/26" > /etc/net/ifaces/ens20/ipv4address
