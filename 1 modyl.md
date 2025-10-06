@@ -194,6 +194,22 @@ timedatectl set-timezone Asia/Yekaterinburg
 exec bash
 ```
 
-**HQ-SRV**
+**HQ-CLI**
+```
+hostnamectl set-hostname hq-cli.au-team.irpo
+mkdir -p /etc/net/ifaces/ens20
+echo -e "\nTYPE=eth\nBOOTPROTO=dhcp" > /etc/net/ifaces/ens20/options
+systemctl restart network
+timedatectl set-timezone Asia/Yekaterinburg
+exec bash
 ```
 
+**HQ-SRV**
+```
+hostnamectl set-hostname hq-cli.au-team.irpo
+mkdir -p /etc/net/ifaces/ens20
+echo -e "\nTYPE=eth\nBOOTPROTO=dhcp" > /etc/net/ifaces/ens20/options
+systemctl restart network
+timedatectl set-timezone Asia/Yekaterinburg
+exec bash
+```
