@@ -54,7 +54,7 @@ useradd -p P@ssw0rd sshuser
 gpasswd -a "sshuser" wheel
 echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "Port 2026" >> /etc/openssh/sshd_config
-echo "AllowUsers remote_user" >> /etc/openssh/sshd_config
+echo "AllowUsers sshuser" >> /etc/openssh/sshd_config
 echo "MaxAuthTries 2" >> /etc/openssh/sshd_config
 echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
 echo "Banner /etc/openssh/banner" >> /etc/openssh/sshd_config
