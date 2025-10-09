@@ -1,6 +1,6 @@
 samba
 **BR-SRV**
-```
+
 apt-get update && apt-get install task-samba-dc -y
 apt-get install sudo-samba-schema -y
 apt-get install chrony -y
@@ -30,14 +30,14 @@ apt-get update && apt-get install sudo-samba-schema -y
 
 
 **HQ-SRV**
-```
+
 echo "server=/au-team.irpo/192.168.3.10" >> /etc/dnsmasq.conf 
 systemctl restart dnsmasq 
 apt-get update && apt-get install fdisk -y
 
 mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sd[b-d]
 mdadm --detail -scan --verbose > /etc/mdadm.conf
-```
+
 
 **HQ-CLI**
 
@@ -72,8 +72,6 @@ echo "   ansible_user: net_admin" >> /etc/ansible/hosts
 echo "   ansible_password: P@ssw0rd" >> /etc/ansible/hosts
 echo "   ansible_connection: network_cli" >> /etc/ansible/hosts
 echo "   ansible_network_os: ios" >> /etc/ansible/hosts
-```
-```
 echo "[defaults]" >> /etc/ansible/ansible.cfg
 echo "ansible_python_interpreter=/usr/bin/python3" >> /etc/ansible/ansible.cfg
 echo "interpreter_python=auto_silent" >> /etc/ansible/ansible.cfg
