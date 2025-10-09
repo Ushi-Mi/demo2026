@@ -86,14 +86,14 @@ echo "   ansible_user: net_admin" >> /etc/ansible/hosts
 echo "   ansible_password: P@ssw0rd" >> /etc/ansible/hosts
 echo "   ansible_connection: network_cli" >> /etc/ansible/hosts
 echo "   ansible_network_os: ios" >> /etc/ansible/hosts
-echo "[defaults]" >> /etc/ansible/ansible.cfg
+echo -e "[defaults]" > /etc/ansible/ansible.cfg
 echo "ansible_python_interpreter=/usr/bin/python3" >> /etc/ansible/ansible.cfg
 echo "interpreter_python=auto_silent" >> /etc/ansible/ansible.cfg
 echo "ansible_host_key_checking=false" >> /etc/ansible/ansible.cfg
 
 ssh-keygen -f id_rsa -t rsa -N ''
-ssh-copy-id -p 2026 sshuser@192.168.1.10
-ssh-copy-id -p 2026 sshuser@192.168.2.10
+ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.1.10
+ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.2.10
 ```
 
 
