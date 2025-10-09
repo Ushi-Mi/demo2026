@@ -1,3 +1,4 @@
+samba
 **BR-SRV**
 ```
 apt-get update && apt-get install task-samba-dc -y
@@ -43,5 +44,42 @@ mdadm --detail -scan --verbose > /etc/mdadm.conf
 **HQ-CLI**
 ```
 apt-get update && apt-get install admc -y
+
+
+**ANSIBLE**
+apt-get update && apt-get install ansible -y 
+
+
+ /etc/ansible/hosts 
+VMs: 
+ hosts:
+  HQ-SRV:
+   ansible_host: 192.168.1.10
+   ansible_user: remote_user
+   ansible_port: 2026
+  HQ-CLI:
+   ansible_host: 192.168.2.10
+   ansible_user: remote_user
+   ansible_port: 2026
+  HQ-RTR:
+   ansible_host: 192.168.1.1
+   ansible_user: net_admin
+   ansible_password: P@ssw0rd
+   ansible_connection: network_cli
+   ansible_network_os: ios
+  BR-RTR:
+   ansible_host: 192.168.3.1
+   ansible_user: net_admin
+   ansible_password: P@ssw0rd
+   ansible_connection: network_cli
+   ansible_network_os: ios
+
+
+
+
+
+
+
+
 system-auth write ad AU-TEAM.IRPO cli AU-TEAM 'administrator' 'P@ssw0rd'
 ```
