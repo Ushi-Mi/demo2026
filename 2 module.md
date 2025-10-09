@@ -46,7 +46,21 @@ system-auth write ad AU-TEAM.IRPO cli AU-TEAM 'administrator' 'P@ssw0rd'
 
 
 **ANSIBLE**
-
+**HQ-CLI**
+```
+systemctl restart network
+useradd sshuser -u 2026
+useradd -p P@ssw0rd sshuser
+gpasswd -a "sshuser" wheel
+echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+echo "Port 2026" >> /etc/openssh/sshd_config
+echo "AllowUsers remote_user" >> /etc/openssh/sshd_config
+echo "MaxAuthTries 2" >> /etc/openssh/sshd_config
+echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
+echo "Banner /etc/openssh/banner" >> /etc/openssh/sshd_config
+echo "Authorized access only" >> /etc/openssh/banner
+systemctl restart sshd
+```
 **BR-SRV**
 ```
 apt-get update && apt-get install ansible -y 
@@ -54,11 +68,11 @@ echo "VMs:" >> /etc/ansible/hosts
 echo " hosts:" >> /etc/ansible/hosts 
 echo "  HQ-SRV:" >> /etc/ansible/hosts 
 echo "   ansible_host: 192.168.1.10" >> /etc/ansible/hosts 
-echo "   ansible_user: remote_user" >> /etc/ansible/hosts 
+echo "   ansible_user: sshuser" >> /etc/ansible/hosts 
 echo "   ansible_port: 2026" >> /etc/ansible/hosts 
 echo "  HQ-CLI:" >> /etc/ansible/hosts 
 echo "   ansible_host: 192.168.2.10" >> /etc/ansible/hosts 
-echo "   ansible_user: remote_user" >> /etc/ansible/hosts 
+echo "   ansible_user: sshuser" >> /etc/ansible/hosts 
 echo "   ansible_port: 2026" >> /etc/ansible/hosts 
 echo "  HQ-RTR:" >> /etc/ansible/hosts 
 echo "   ansible_host: 192.168.1.1" >> /etc/ansible/hosts 
@@ -76,22 +90,13 @@ echo "[defaults]" >> /etc/ansible/ansible.cfg
 echo "ansible_python_interpreter=/usr/bin/python3" >> /etc/ansible/ansible.cfg
 echo "interpreter_python=auto_silent" >> /etc/ansible/ansible.cfg
 echo "ansible_host_key_checking=false" >> /etc/ansible/ansible.cfg
+
+ssh-keygen -f id_rsa -t rsa -N ''
+ssh-copy-id -p 2026 sshuser@192.168.1.10
+ssh-copy-id -p 2026 sshuser@192.168.2.10
 ```
 
-**HQ-CLI**
-```
-systemctl restart network
-useradd sshuser -u 2026
-useradd -p P@ssw0rd sshuser
-gpasswd -a "sshuser" wheel
-echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
-echo "Port 2026" >> /etc/openssh/sshd_config
-echo "MaxAuthTries 2" >> /etc/openssh/sshd_config
-echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
-echo "Banner /etc/openssh/banner" >> /etc/openssh/sshd_config
-echo "Authorized access only" >> /etc/openssh/banner
-systemctl restart sshd
-```
+
 
 
 
