@@ -28,7 +28,6 @@ apt-get update && apt-get install sudo-samba-schema -y
 
 
 
-```
 
 **HQ-SRV**
 ```
@@ -38,11 +37,10 @@ apt-get update && apt-get install fdisk -y
 
 mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sd[b-d]
 mdadm --detail -scan --verbose > /etc/mdadm.conf
-
 ```
 
 **HQ-CLI**
-```
+
 apt-get update && apt-get install admc -y
 system-auth write ad AU-TEAM.IRPO cli AU-TEAM 'administrator' 'P@ssw0rd'
 
