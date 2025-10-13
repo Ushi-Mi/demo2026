@@ -119,8 +119,9 @@ echo "docker compose -f /root/site.yml down" >> /root/config/autorestart.sh
 echo "systemctl restart docker" >> /root/config/autorestart.sh
 echo "docker compose -f /root/site.yml up -d" >> /root/config/autorestart.sh
 export EDITOR=vim
-crontab -e
+
 ```
+crontab -e
 # Нажимайте i, и в самом конце пишите
 @reboot /root/config/autorestart.sh
 # Затем нажимайте ESC > :wq
