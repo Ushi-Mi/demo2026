@@ -1,5 +1,7 @@
 **samba**
+
 **BR-SRV**
+```
 if ! grep -q '^nameserver 8\.8\.8\.8$' /etc/resolv.conf; then
     echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf
 fi
@@ -45,10 +47,15 @@ ldbadd -H /var/lib/samba/private/sam.ldb sudoRole-object.ldif
 echo -e "dn: CN=prava_hq,OU=sudoers,DC=au-team,DC=irpo\nchangetype: modify\nreplace: nTSecurityDescriptor" > ntGen.ldif
 ldbsearch  -H /var/lib/samba/private/sam.ldb -s base -b 'CN=prava_hq,OU=sudoers,DC=au-team,DC=irpo' 'nTSecurityDescriptor' | sed -n '/^#/d;s/O:DAG:DAD:AI/O:DAG:DAD:AI\(A\;\;RPLCRC\;\;\;AU\)\(A\;\;RPWPCRCCDCLCLORCWOWDSDDTSW\;\;\;SY\)/;3,$p' | sed ':a;N;$!ba;s/\n\s//g' | sed -e 's/.\{78\}/&\n /g' >> ntGen.ldif
 ldbmodify -v -H /var/lib/samba/private/sam.ldb ntGen.ldif
+```
 **HQ-SRV**
+```
 echo "server=/au-team.irpo/192.168.3.10" >> /etc/dnsmasq.conf
 systemctl restart dnsmasq
+apt-get update && apt-get install fdisk -y 
+```
 **HQ-CLI**
+```
 sed -i 's/BOOTPROTO=static/BOOTPROTO=dhcp/' /etc/net/ifaces/ens20/options
 systemctl restart network
 apt-get update && apt-get install bind-utils -y
@@ -64,7 +71,7 @@ sudoers: files sss' /etc/nsswitch.conf
 rm -rf /var/lib/sss/db/*
 sss_cache -E
 systemctl restart sssd
-
+```
 **ANSIBLE**
 **HQ-CLI**
 ```
