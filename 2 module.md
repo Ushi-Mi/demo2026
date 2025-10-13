@@ -139,6 +139,8 @@ systemctl restart network
 apt-get update && apt-get install bind-utils -y
 system-auth write ad AU-TEAM.IRPO cli AU-TEAM 'administrator' 'P@ssw0rd'
 reboot
+```
+```
 apt-get install sudo libsss_sudo -y
 control sudo public
 sed -i '19 a\
