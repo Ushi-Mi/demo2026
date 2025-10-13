@@ -75,3 +75,6 @@ ssh-keygen -f id_rsa -t rsa -N ''
 ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.1.10
 ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.2.10
 ```
+
+-e ключ пассворд
+
