@@ -47,6 +47,14 @@ ldbadd -H /var/lib/samba/private/sam.ldb sudoRole-object.ldif
 echo -e "dn: CN=prava_hq,OU=sudoers,DC=au-team,DC=irpo\nchangetype: modify\nreplace: nTSecurityDescriptor" > ntGen.ldif
 ldbsearch  -H /var/lib/samba/private/sam.ldb -s base -b 'CN=prava_hq,OU=sudoers,DC=au-team,DC=irpo' 'nTSecurityDescriptor' | sed -n '/^#/d;s/O:DAG:DAD:AI/O:DAG:DAD:AI\(A\;\;RPLCRC\;\;\;AU\)\(A\;\;RPWPCRCCDCLCLORCWOWDSDDTSW\;\;\;SY\)/;3,$p' | sed ':a;N;$!ba;s/\n\s//g' | sed -e 's/.\{78\}/&\n /g' >> ntGen.ldif
 ldbmodify -v -H /var/lib/samba/private/sam.ldb ntGen.ldif
+apt-get install chrony -y 
+echo -e "server 172.16.2.1 iburst prefer" > /etc/chrony.conf
+закомментировать всё
+
+systemctl enable --now chronyd
+systemctl restart chronyd
+chronyc sources 
+timedatectl 
 ```
 
 **HQ-SRV**
@@ -67,17 +75,14 @@ p
 w
 EOF
 
-echo "/dev/md0p1   /raid  ext4    defaults     0   0" >> /etc/hosts
+echo "/dev/md0p1      /raid   ext4    defaults        0       0" >> /etc/hosts
 mkdir /raid
 mount -a
 apt-get install nfs-server -y
 mkdir /raid/nfs
 chown 99:99 /raid/nfs
 chmod 777 /raid/nfs
-
-
-echo "/raid/nfs 192.168.2.0/28(rw,sync,no_subtree_check)" >> vim /etc/exports
-
+echo "/raid/nfs 192.168.2.0/28(rw,sync,no_subtree_check)" >> /etc/exports
 exportfs -a
 exportfs -v
 systemctl enable nfs
@@ -103,7 +108,21 @@ systemctl restart sssd
 
 apt-get install nfs-clients -y
 mkdir -p /mnt/nfs
-echo "192.168.1.10:/raid/nfs  /mnt/nfs     nfs intr,soft,_netdev,x-systemd.automount     0   0" >> /etc/fstab
+echo "192.168.1.10:/raid/nfs  /mnt/nfs        nfs     intr,soft,_netdev,x-systemd.automount   0     0" >> /etc/fstab
+mount -a
+mount -v
+touch /mnt/nfs/test
+```
+**ISP**
+```
+apt-get install chrony -y 
+echo -e "server 127.0.0.1 iburst prefer\nhwtimestamp *\nlocal stratum 5\nallow 0/0" > /etc/chrony.conf
+echo "driftfile /var/lib/chrony/drifr" >> /etc/chrony.conf
+echo "ntsdumpdir /var/log/chrony" >> /etc/chrony.conf
+systemctl enable --now chronyd 
+systemctl restart chronyd 
+chronyc sources
+chronyc traking | grep Stratum  
 ```
 **ANSIBLE**
 **HQ-CLI**
