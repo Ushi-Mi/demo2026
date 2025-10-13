@@ -116,13 +116,11 @@ touch /mnt/nfs/test
 **ISP**
 ```
 apt-get install chrony -y 
-echo -e "server 127.0.0.1 iburst prefer\nhwtimestamp *\nlocal stratum 5\nallow 0/0" > /etc/chrony.conf
-echo "driftfile /var/lib/chrony/drifr" >> /etc/chrony.conf
-echo "ntsdumpdir /var/log/chrony" >> /etc/chrony.conf
+echo -e "server 127.0.0.1 iburst prefer\nhwtimestamp *\nlocal stratum 5\nallow 0/0\ndriftfile /var/lib/chrony/drifr\nntsdumpdir /var/log/chrony" > /etc/chrony.conf
 systemctl enable --now chronyd 
 systemctl restart chronyd 
 chronyc sources
-chronyc traking | grep Stratum  
+chronyc tracking | grep Stratum  
 ```
 **ANSIBLE**
 **HQ-CLI**
