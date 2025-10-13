@@ -1,4 +1,4 @@
-**samba**
+**2.1-2.5 включительно**
 
 **BR-SRV**
 ```
@@ -49,12 +49,43 @@ ldbsearch  -H /var/lib/samba/private/sam.ldb -s base -b 'CN=prava_hq,OU=sudoers,
 ldbmodify -v -H /var/lib/samba/private/sam.ldb ntGen.ldif
 apt-get install chrony -y 
 echo -e "server 172.16.2.1 iburst prefer" > /etc/chrony.conf
-закомментировать всё
-
 systemctl enable --now chronyd
 systemctl restart chronyd
 chronyc sources 
-timedatectl 
+timedatectl
+apt-get update && apt-get install ansible -y 
+echo "VMs:" >> /etc/ansible/hosts 
+echo " hosts:" >> /etc/ansible/hosts 
+echo "  HQ-SRV:" >> /etc/ansible/hosts 
+echo "   ansible_host: 192.168.1.10" >> /etc/ansible/hosts 
+echo "   ansible_user: sshuser" >> /etc/ansible/hosts 
+echo "   ansible_port: 2026" >> /etc/ansible/hosts 
+echo "  HQ-CLI:" >> /etc/ansible/hosts 
+echo "   ansible_host: 192.168.2.10" >> /etc/ansible/hosts 
+echo "   ansible_user: sshuser" >> /etc/ansible/hosts 
+echo "   ansible_port: 2026" >> /etc/ansible/hosts 
+echo "  HQ-RTR:" >> /etc/ansible/hosts 
+echo "   ansible_host: 192.168.1.1" >> /etc/ansible/hosts 
+echo "   ansible_user: net_admin" >> /etc/ansible/hosts 
+echo "   ansible_password: P@ssw0rd" >> /etc/ansible/hosts 
+echo "   ansible_connection: network_cli" >> /etc/ansible/hosts
+echo "   ansible_network_os: ios" >> /etc/ansible/hosts
+echo "  BR-RTR:" >> /etc/ansible/hosts
+echo "   ansible_host: 192.168.3.1" >> /etc/ansible/hosts
+echo "   ansible_user: net_admin" >> /etc/ansible/hosts
+echo "   ansible_password: P@ssw0rd" >> /etc/ansible/hosts
+echo "   ansible_connection: network_cli" >> /etc/ansible/hosts
+echo "   ansible_network_os: ios" >> /etc/ansible/hosts
+echo "ansible_password=P@ssw0rd" >> /etc/ansible/hosts
+echo "ansible_connection=network_cli" >> /etc/ansible/hosts
+echo "ansible_network_os=ios" >> /etc/ansible/hosts
+echo -e "[defaults]" > /etc/ansible/ansible.cfg
+echo "ansible_python_interpreter=/usr/bin/python3" >> /etc/ansible/ansible.cfg
+echo "interpreter_python=auto_silent" >> /etc/ansible/ansible.cfg
+echo "ansible_host_key_checking=false" >> /etc/ansible/ansible.cfg
+ssh-keygen -f id_rsa -t rsa -N ''
+ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.1.10
+ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.2.10
 ```
 
 **HQ-SRV**
@@ -87,6 +118,12 @@ exportfs -a
 exportfs -v
 systemctl enable nfs
 systemctl restart nfs
+apt-get install chrony -y 
+echo -e "server 172.16.1.1 iburst prefer" > /etc/chrony.conf
+systemctl enable --now chronyd
+systemctl restart chronyd
+chronyc sources 
+timedatectl 
 ```
 **HQ-CLI**
 ```
@@ -112,19 +149,12 @@ echo "192.168.1.10:/raid/nfs  /mnt/nfs        nfs     intr,soft,_netdev,x-syste
 mount -a
 mount -v
 touch /mnt/nfs/test
-```
-**ISP**
-```
 apt-get install chrony -y 
-echo -e "server 127.0.0.1 iburst prefer\nhwtimestamp *\nlocal stratum 5\nallow 0/0\ndriftfile /var/lib/chrony/drifr\nntsdumpdir /var/log/chrony" > /etc/chrony.conf
-systemctl enable --now chronyd 
-systemctl restart chronyd 
-chronyc sources
-chronyc tracking | grep Stratum  
-```
-**ANSIBLE**
-**HQ-CLI**
-```
+echo -e "server 172.16.1.1 iburst prefer" > /etc/chrony.conf
+systemctl enable --now chronyd
+systemctl restart chronyd
+chronyc sources 
+timedatectl
 systemctl restart network
 useradd sshuser -u 2026
 useradd -p P@ssw0rd sshuser
@@ -138,42 +168,30 @@ echo "Banner /etc/openssh/banner" >> /etc/openssh/sshd_config
 echo "Authorized access only" >> /etc/openssh/banner
 systemctl restart sshd
 ```
-**BR-SRV**
+**ISP**
 ```
-apt-get update && apt-get install ansible -y 
-echo "VMs:" >> /etc/ansible/hosts 
-echo " hosts:" >> /etc/ansible/hosts 
-echo "  HQ-SRV:" >> /etc/ansible/hosts 
-echo "   ansible_host: 192.168.1.10" >> /etc/ansible/hosts 
-echo "   ansible_user: sshuser" >> /etc/ansible/hosts 
-echo "   ansible_port: 2026" >> /etc/ansible/hosts 
-echo "  HQ-CLI:" >> /etc/ansible/hosts 
-echo "   ansible_host: 192.168.2.10" >> /etc/ansible/hosts 
-echo "   ansible_user: sshuser" >> /etc/ansible/hosts 
-echo "   ansible_port: 2026" >> /etc/ansible/hosts 
-echo "  HQ-RTR:" >> /etc/ansible/hosts 
-echo "   ansible_host: 192.168.1.1" >> /etc/ansible/hosts 
-echo "   ansible_user: net_admin" >> /etc/ansible/hosts 
-echo "   ansible_password: P@ssw0rd" >> /etc/ansible/hosts 
-echo "   ansible_connection: network_cli" >> /etc/ansible/hosts
-echo "   ansible_network_os: ios" >> /etc/ansible/hosts
-echo "  BR-RTR:" >> /etc/ansible/hosts
-echo "   ansible_host: 192.168.3.1" >> /etc/ansible/hosts
-echo "   ansible_user: net_admin" >> /etc/ansible/hosts
-echo "   ansible_password: P@ssw0rd" >> /etc/ansible/hosts
-echo "   ansible_connection: network_cli" >> /etc/ansible/hosts
-echo "   ansible_network_os: ios" >> /etc/ansible/hosts
-echo "ansible_password=P@ssw0rd" >> /etc/ansible/hosts
-echo "ansible_connection=network_cli" >> /etc/ansible/hosts
-echo "ansible_network_os=ios" >> /etc/ansible/hosts
-echo -e "[defaults]" > /etc/ansible/ansible.cfg
-echo "ansible_python_interpreter=/usr/bin/python3" >> /etc/ansible/ansible.cfg
-echo "interpreter_python=auto_silent" >> /etc/ansible/ansible.cfg
-echo "ansible_host_key_checking=false" >> /etc/ansible/ansible.cfg
-
-ssh-keygen -f id_rsa -t rsa -N ''
-ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.1.10
-ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.2.10
+apt-get install chrony -y 
+echo -e "server 127.0.0.1 iburst prefer\nhwtimestamp *\nlocal stratum 5\nallow 0/0\ndriftfile /var/lib/chrony/drifr\nntsdumpdir /var/log/chrony" > /etc/chrony.conf
+systemctl enable --now chronyd 
+systemctl restart chronyd 
+chronyc sources
+chronyc tracking | grep Stratum  
+```
+**HQ-RTR**
+```
+en
+conf t
+ntp server 172.16.1.1
+ex
+wr mem
+```
+**BR-RTR**
+```
+en
+conf t
+ntp server 172.16.2.1
+ex
+wr mem
 ```
 
 
