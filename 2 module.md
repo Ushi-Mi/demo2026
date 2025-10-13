@@ -259,7 +259,34 @@ echo -e "server 127.0.0.1 iburst prefer\nhwtimestamp *\nlocal stratum 5\nallow 0
 systemctl enable --now chronyd 
 systemctl restart chronyd 
 chronyc sources
-chronyc tracking | grep Stratum  
+chronyc tracking | grep Stratum
+apt-get install nginx -y
+apt-get install apache2-htpasswd -y
+htpasswd -bc /etc/nginx/.htpasswd WEB P@ssw0rd
+echo "server {" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    listen 80;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    server_name web.au-team.irpo;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    auth_basic "Restricted Access";" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    auth_basic_user_file /etc/nginx/.htpasswd;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    location / {" >> /etc/nginx/sites-available.d/proxy.conf
+echo "        proxy_pass http://172.16.1.4:8080;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "        proxy_set_header Host \$host;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "        proxy_set_header X-Real-IP \$remote_addr;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    }" >> /etc/nginx/sites-available.d/proxy.conf
+echo "}" >> /etc/nginx/sites-available.d/proxy.conf
+echo "server {" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    listen 80;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    server_name docker.au-team.irpo;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    location / {" >> /etc/nginx/sites-available.d/proxy.conf
+echo "        proxy_pass http://172.16.2.5:8080;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "        proxy_set_header Host \$host;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "        proxy_set_header X-Real-IP \$remote_addr;" >> /etc/nginx/sites-available.d/proxy.conf
+echo "    }" >> /etc/nginx/sites-available.d/proxy.conf
+echo "}" >> /etc/nginx/sites-available.d/proxy.conf
+ln -s /etc/nginx/sites-available.d/proxy.conf /etc/nginx/sites-enabled.d/
+mv /etc/nginx/sites-available.d/default.conf /root/
+systemctl enable --now nginx
+systemctl restart nginx
 ```
 **HQ-RTR**
 ```
