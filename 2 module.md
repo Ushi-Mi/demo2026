@@ -1,6 +1,12 @@
 **2.1-2.5 включительно +2.8**
 
 **BR-SRV**
+
+**Перейти в PVE > выбрать пункт local (AltPVE) > ISO Images > Upload > 
+Выбрать путь к ISO > Upload;**
+**Отключить ВМ HQ-SRV / BR-SRV > в HQ-SRV / BR-SRV выбрать пункт Hardware > 
+Add > CD/DVD Drive > Выбрать Storage (local) и ISO Image (Additional.iso) > Add**
+
 ```
 if ! grep -q '^nameserver 8\.8\.8\.8$' /etc/resolv.conf; then
     echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf
@@ -59,7 +65,67 @@ rm -f /etc/ansible/ansible.cfg
 echo -e "[defaults]\ninterpreter_python=auto_silent\nhost_key_checking=false" > /etc/ansible/ansible.cfg
 ansible all -m ping
 
+mount -o loop /dev/sr0
+apt-get update && apt-get install docker-compose docker-engine -y
+systemctl enable --now docker
+systemctl status docker
+mount -o loop /dev/sr0
+docker load < /media/ALTLinux/docker/site_latest.tar
+docker load < /media/ALTLinux/docker/mariadb_latest.tar
+docker images
+echo "services:" >> /root/site.yml
+echo "  db:" >> /root/site.yml
+echo "    image: mariadb" >> /root/site.yml
+echo "    container_name: db" >> /root/site.yml
+echo "    environment:" >> /root/site.yml
+echo "      DB_NAME: testdb" >> /root/site.yml
+echo "      DB_USER: test" >> /root/site.yml
+echo "      DB_PASS: Passw0rd" >> /root/site.yml
+echo "      MYSQL_ROOT_PASSWORD: Passw0rd" >> /root/site.yml
+echo "      MYSQL_DATABASE: testdb" >> /root/site.yml
+echo "      MYSQL_USER: test" >> /root/site.yml
+echo "      MYSQL_PASSWORD: Passw0rd" >> /root/site.yml
+echo "    volumes:" >> /root/site.yml
+echo "      - db_data:/var/lib/mysql" >> /root/site.yml
+echo "    networks:" >> /root/site.yml
+echo "      - app_network" >> /root/site.yml
+echo "    restart: unless-stopped" >> /root/site.yml
+echo "  testapp:" >> /root/site.yml
+echo "    image: site" >> /root/site.yml
+echo "    container_name: testapp" >> /root/site.yml
+echo "    environment:" >> /root/site.yml
+echo "      DB_TYPE: maria" >> /root/site.yml
+echo "      DB_HOST: db" >> /root/site.yml
+echo "      DB_NAME: testdb" >> /root/site.yml
+echo "      DB_USER: test" >> /root/site.yml
+echo "      DB_PASS: Passw0rd" >> /root/site.yml
+echo "      DB_PORT: 3306" >> /root/site.yml
+echo "    ports:" >> /root/site.yml
+echo "      - "8080:8000"" >> /root/site.yml
+echo "    networks:" >> /root/site.yml
+echo "      - app_network" >> /root/site.yml
+echo "    depends_on:" >> /root/site.yml
+echo "      - db" >> /root/site.yml
+echo "    restart: unless-stopped" >> /root/site.yml
+echo "volumes:" >> /root/site.yml
+echo "  db_data:" >> /root/site.yml
+echo "networks:" >> /root/site.yml
+echo "  app_network:" >> /root/site.yml
+echo "    driver: bridge" >> /root/site.yml
+docker compose -f site.yml up -d
+docker exec -it db mysql -u root -pPassw0rd -e "CREATE DATABASE testdb; CREATE USER 'test'@'%' IDENTIFIED BY 'Passw0rd'; GRANT ALL PRIVILEGES ON testdb.* TO 'test'@'%'; FLUSH PRIVILEGES;"
+docker compose -f site.yml down && docker compose -f site.yml up -d
+mkdir -p /root/config
+echo "docker compose -f /root/site.yml down" >> /root/config/autorestart.sh
+echo "systemctl restart docker" >> /root/config/autorestart.sh
+echo "docker compose -f /root/site.yml up -d" >> /root/config/autorestart.sh
+export EDITOR=vim
+crontab -e
 ```
+# Нажимайте i, и в самом конце пишите
+@reboot /root/config/autorestart.sh
+# Затем нажимайте ESC > :wq
+
 
 
 **HQ-SRV**
