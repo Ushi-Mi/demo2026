@@ -48,11 +48,40 @@ echo -e "dn: CN=prava_hq,OU=sudoers,DC=au-team,DC=irpo\nchangetype: modify\nrepl
 ldbsearch  -H /var/lib/samba/private/sam.ldb -s base -b 'CN=prava_hq,OU=sudoers,DC=au-team,DC=irpo' 'nTSecurityDescriptor' | sed -n '/^#/d;s/O:DAG:DAD:AI/O:DAG:DAD:AI\(A\;\;RPLCRC\;\;\;AU\)\(A\;\;RPWPCRCCDCLCLORCWOWDSDDTSW\;\;\;SY\)/;3,$p' | sed ':a;N;$!ba;s/\n\s//g' | sed -e 's/.\{78\}/&\n /g' >> ntGen.ldif
 ldbmodify -v -H /var/lib/samba/private/sam.ldb ntGen.ldif
 ```
+
 **HQ-SRV**
+
+**Создаем 2 жестких диска на локальном сайте с объемом по 1 ГБ**
+
 ```
 echo "server=/au-team.irpo/192.168.3.10" >> /etc/dnsmasq.conf
 systemctl restart dnsmasq
-apt-get update && apt-get install fdisk -y 
+apt-get update && apt-get install fdisk -y
+mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sd[b-d]
+fdisk /dev/md0 << EOF
+n
+p
+1
+2048
+4186111
+w
+EOF
+
+echo "/dev/md0p1   /raid  ext4    defaults     0   0" >> /etc/hosts
+mkdir /raid
+mount -a
+apt-get install nfs-server -y
+mkdir /raid/nfs
+chown 99:99 /raid/nfs
+chmod 777 /raid/nfs
+
+
+echo "/raid/nfs 192.168.2.0/28(rw,sync,no_subtree_check)" >> vim /etc/exports
+
+exportfs -a
+exportfs -v
+systemctl enable nfs
+systemctl restart nfs
 ```
 **HQ-CLI**
 ```
@@ -71,6 +100,10 @@ sudoers: files sss' /etc/nsswitch.conf
 rm -rf /var/lib/sss/db/*
 sss_cache -E
 systemctl restart sssd
+
+apt-get install nfs-clients -y
+mkdir -p /mnt/nfs
+echo "192.168.1.10:/raid/nfs  /mnt/nfs     nfs intr,soft,_netdev,x-systemd.automount     0   0" >> /etc/fstab
 ```
 **ANSIBLE**
 **HQ-CLI**
