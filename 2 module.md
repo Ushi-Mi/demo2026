@@ -184,10 +184,29 @@ CREATE DATABASE webdb;
 CREATE USER 'webc'@'localhost' IDENTIFIED BY 'P@ssw0rd';
 GRANT ALL PRIVILEGES ON webdb.* TO 'webc'@'localhost';
 FLUSH PRIVILEGES;
-exit
+mysql -e "CREATE DATABASE webdb;"
+mysql -e "CREATE USER 'webc'@'localhost' IDENTIFIED BY 'P@ssw0rd';"
+mysql -e "GRANT ALL PRIVILEGES ON webdb.* TO 'webc'@'localhost';"
+mysql -e "FLUSH PRIVILEGES;"
+iconv -f UTF-16LE -t UTF-8 /media/ALTLinux/web/dump.sql > /tmp/dump_utf8.sql
+mysql -u root webdb < /tmp/dump_utf8.sql
+chmod 777 /var/www/html
+cp /media/ALTLinux/web/index.php /var/www/html
+cp /media/ALTLinux/web/logo.png /var/www/html
+rm -f /var/www/html/index.html
+chown apache2:apache2 /var/www/html
+systemctl restart httpd2
+echo "\n$servername = "localhost";\n$username = "webc;\n$password = "P@ssw0rd";\n$dbname = "webdb";" >> /var/www/html/index.php
+systemctl restart httpd2
+sed -i "s/\$servername = .*;/\$servername = 'localhost';/" /var/www/html/index.php
+sed -i "s/\$dbname = .*;/\$dbname = 'webdb';/" /var/www/html/index.php
+sed -i "s/\$password = .*;/\$password = 'P@ssw0rd';/" /var/www/html/index.php
+sed -i "s/\$username = .*;/\$username = 'webc';/" /var/www/html/index.php
+
 ```
 **HQ-CLI**
 ```
+systemctl restart network
 sed -i 's/BOOTPROTO=static/BOOTPROTO=dhcp/' /etc/net/ifaces/ens20/options
 systemctl restart network
 apt-get update && apt-get install bind-utils -y
@@ -230,6 +249,8 @@ echo "PasswordAuthentication yes" >> /etc/openssh/sshd_config
 echo "Banner /etc/openssh/banner" >> /etc/openssh/sshd_config
 echo "Authorized access only" >> /etc/openssh/banner
 systemctl restart sshd
+systemctl restart network
+apt-get update && apt-get install yandex-browser-stable -y
 ```
 **ISP**
 ```
