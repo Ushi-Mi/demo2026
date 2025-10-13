@@ -53,43 +53,13 @@ systemctl enable --now chronyd
 systemctl restart chronyd
 chronyc sources 
 timedatectl
-apt-get update && apt-get install ansible -y 
-echo "VMs:" >> /etc/ansible/hosts 
-echo " hosts:" >> /etc/ansible/hosts 
-echo "  HQ-SRV:" >> /etc/ansible/hosts 
-echo "   ansible_host: 192.168.1.10" >> /etc/ansible/hosts 
-echo "   ansible_user: sshuser" >> /etc/ansible/hosts 
-echo "   ansible_port: 2026" >> /etc/ansible/hosts 
-echo "  HQ-CLI:" >> /etc/ansible/hosts 
-echo "   ansible_host: 192.168.2.10" >> /etc/ansible/hosts 
-echo "   ansible_user: sshuser" >> /etc/ansible/hosts 
-echo "   ansible_port: 2026" >> /etc/ansible/hosts 
-echo "  HQ-RTR:" >> /etc/ansible/hosts 
-echo "   ansible_host: 192.168.1.1" >> /etc/ansible/hosts 
-echo "   ansible_user: net_admin" >> /etc/ansible/hosts 
-echo "   ansible_password: P@ssw0rd" >> /etc/ansible/hosts 
-echo "   ansible_connection: network_cli" >> /etc/ansible/hosts
-echo "   ansible_network_os: ios" >> /etc/ansible/hosts
-echo "  BR-RTR:" >> /etc/ansible/hosts
-echo "   ansible_host: 192.168.3.1" >> /etc/ansible/hosts
-echo "   ansible_user: net_admin" >> /etc/ansible/hosts
-echo "   ansible_password: P@ssw0rd" >> /etc/ansible/hosts
-echo "   ansible_connection: network_cli" >> /etc/ansible/hosts
-echo "   ansible_network_os: ios" >> /etc/ansible/hosts
-echo -e "[defaults]" > /etc/ansible/ansible.cfg
-echo "ansible_python_interpreter=/usr/bin/python3" >> /etc/ansible/ansible.cfg
-echo "interpreter_python=auto_silent" >> /etc/ansible/ansible.cfg
-echo "ansible_host_key_checking=false" >> /etc/ansible/ansible.cfg
-ssh-keygen -f id_rsa -t rsa -N ''
-ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.1.10
-ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.2.10
+
 ```
 apt-get update && apt-get install ansible sshpass -y
 echo -e "[s]\nHQ-SRV ansible_host=192.168.1.10\nHQ-CLI ansible_host=192.168.2.10\n[s:vars]\nansible_user=sshuser\nansible_port=2026\nansible_password=P@ssw0rd\n[r]\nHQ-RTR ansible_host=192.168.1.1\nBR-RTR ansible_host=192.168.3.1\n[r:vars]\nansible_user=net_admin\nansible_password=P@ssw0rd\nansible_connection=network_cli\nansible_network_os=ios" > /etc/ansible/hosts
 rm -f /etc/ansible/ansible.cfg
 echo -e "[defaults]\ninterpreter_python=auto_silent\nhost_key_checking=false" > /etc/ansible/ansible.cfg
 ansible all -m ping
-
 
 
 **HQ-SRV**
@@ -199,8 +169,6 @@ ntp server 172.16.2.1
 ex
 wr mem
 ```
-
-
 
 
 
