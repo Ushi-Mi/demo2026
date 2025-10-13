@@ -249,16 +249,3 @@ exec bash
 ```
 
 
-
-
-
-
-
-
-
-
-
-echo "User_Alias	WHEEL_USERS = %wheel" >> /etc/sudoers
-echo "User_Alias	XGRP_USERS = %xgrp" >> /etc/sudoers
-echo "Defaults:XGRP_USERS env_keep += "DISPLAY XAITHORITY" " >> /etc/sudoers
-echo "WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
