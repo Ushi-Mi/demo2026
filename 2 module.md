@@ -125,8 +125,10 @@ crontab -e
 # Нажимайте i, и в самом конце пишите
 @reboot /root/config/autorestart.sh
 # Затем нажимайте ESC > :wq
-
-
+(ansible) черновик
+ssh-keygen -f id_rsa -t rsa -N ''
+ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.1.10
+ssh-copy-id -p 2026 -i ~/id_rsa sshuser@192.168.2.10
 
 **HQ-SRV**
 
