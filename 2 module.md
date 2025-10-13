@@ -163,7 +163,28 @@ echo -e "server 172.16.1.1 iburst prefer" > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
 chronyc sources 
-timedatectl 
+timedatectl
+apt-get update
+apt-get install -y apache2 php8.2 apache2-mod_php8.2 mariadb-server php8.2-{opcache,curl,gd,intl,mysqli,xml,xmlrpc,ldap,zip,soap,mbstring,json,xmlreader,fileinfo,sodium}
+mount -o loop /dev/sr0
+systemctl enable --now httpd2 mysqld
+mysql_secure_installation << EOF
+y
+y
+P@ssw0rd
+P@ssw0rd
+y
+y
+y
+y
+EOF
+ex
+mariadb -u root -p
+CREATE DATABASE webdb;
+CREATE USER 'webc'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+GRANT ALL PRIVILEGES ON webdb.* TO 'webc'@'localhost';
+FLUSH PRIVILEGES;
+exit
 ```
 **HQ-CLI**
 ```
