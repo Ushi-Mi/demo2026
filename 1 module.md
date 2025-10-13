@@ -12,7 +12,7 @@ echo "172.16.2.1/28" > /etc/net/ifaces/ens22/ipv4address
 echo "net.ipv4.ip_forward = 1" >> /etc/net/sysctl.conf
 systemctl restart network
 apt-get update && apt-get install iptables -y
-apt-get reinstall tzdata
+apt-get reinstall tzdata -y
 timedatectl set-timezone Asia/Yekaterinburg
 iptables -t nat -A POSTROUTING -o ens20 -s 0/0 -j MASQUERADE
 iptables-save > /etc/sysconfig/iptables
