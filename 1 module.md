@@ -177,7 +177,6 @@ echo -e "\nDISABLED=no\nTYPE=eth\nBOOTPROTO=static\nCONFIG_IPv4=yes" > /etc/net/
 echo "192.168.3.10/28" > /etc/net/ifaces/ens20/ipv4address
 echo "default via 192.168.3.1" > /etc/net/ifaces/ens20/ipv4route
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
-echo "nameserver 192.168.1.10" > /etc/resolv.conf
 systemctl restart network
 useradd sshuser -u 2026
 useradd -p P@ssw0rd sshuser
